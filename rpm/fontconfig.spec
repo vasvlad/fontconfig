@@ -1,3 +1,4 @@
+%define keepstatic 1
 %global freetype_version 2.1.4
 
 Name:       fontconfig
@@ -40,6 +41,19 @@ and developer docs for the fontconfig package.
 Install fontconfig-devel if you want to develop programs which 
 will use fontconfig.
 
+%package devel-static
+Summary:    Font configuration and customization library
+#Requires:   %{name} = %{version}-%{release}
+#Requires:   freetype-devel >= %{freetype_version}
+
+%description devel-static
+The fontconfig-devel package includes the header files,
+and developer docs for the fontconfig package.
+
+Install fontconfig-devel if you want to develop programs which 
+will use fontconfig.
+
+
 
 %prep
 %autosetup -p1 -n %{name}-%{version}/%{name}
@@ -50,7 +64,7 @@ will use fontconfig.
 export HASDOCBOOK=no
 
 NOCONFIGURE=1 sh autogen.sh
-%configure --disable-static
+%configure --enable-static
 %make_build
 
 %install
@@ -65,6 +79,7 @@ ln -s %{_datadir}/fontconfig/conf.avail/10-autohint.conf $RPM_BUILD_ROOT%{_sysco
 ln -s %{_datadir}/fontconfig/conf.avail/10-antialias.conf $RPM_BUILD_ROOT%{_sysconfdir}/fonts/conf.d
 ln -s %{_datadir}/fontconfig/conf.avail/10-hinted.conf $RPM_BUILD_ROOT%{_sysconfdir}/fonts/conf.d
 ln -s %{_datadir}/fontconfig/conf.avail/25-no-bitmap-fedora.conf $RPM_BUILD_ROOT%{_sysconfdir}/fonts/conf.d
+rm -rf $RPM_BUILD_ROOT/usr/share/locale/zh_CN/LC_MESSAGES/fontconfig.mo
 
 # All font packages depend on this package, so we create
 # and own /usr/share/fonts
@@ -122,4 +137,7 @@ fi
 %{_datadir}/gettext/its/fontconfig.its
 %{_datadir}/gettext/its/fontconfig.loc
 %{_datadir}/locale/zh_CN/LC_MESSAGES/fontconfig-conf.mo
-%{_datadir}/locale/zh_CN/LC_MESSAGES/fontconfig.mo
+
+%files devel-static
+%defattr(-, root, root)
+%{_libdir}/*.a
