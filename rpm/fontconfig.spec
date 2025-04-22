@@ -64,6 +64,7 @@ will use fontconfig.
 export HASDOCBOOK=no
 
 NOCONFIGURE=1 sh autogen.sh
+export CFLAGS="$RPM_OPT_FLAGS -fPIC"
 %configure --enable-static
 %make_build
 
